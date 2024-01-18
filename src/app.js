@@ -1,9 +1,18 @@
-const ProductManager = require("./ProductManager");
-const Product = require("./Product");
-const express = require("express");
+import { productManager } from "./ProductManager.js";
+import { Product } from "./Product.js";
+import express from "express";
+import { productsRoutes } from "./routes/products.routes.js";
 const app = express();
+
+app.use(express.json());
+app.use("/products", productsRoutes);
 const port = 8080;
 
+app.listen(port, (req, res) => {
+  console.log(`escuchando el puerto ${port}`);
+});
+
+//productos
 const product1 = new Product(
   "producto prueba",
   "este es un producto prueba",
@@ -32,17 +41,8 @@ const product3 = new Product(
 );
 
 const init = async () => {
-  await ProductManager.addProduct(product1);
-  await ProductManager.addProduct(product2);
-  await ProductManager.addProduct(product3);
+  await productManager.addProduct(product1);
+  await productManager.addProduct(product2);
+  await productManager.addProduct(product3);
 };
-app.get("/", (req, res) => {
-  res.send("<h1>hola mundo</h1>");
-});
-app.get("/usuario", (req, res) => {
-  res.send({ id: 1, user: "pepito", pos: [] });
-});
-
-app.listen(port, () => {
-  console.log(`estamos escuchando el pueto ${port}`);
-});
+init();

@@ -1,8 +1,4 @@
-const { rejects } = require("assert");
-const { error } = require("console");
-const { promises } = require("dns");
-const fs = require("fs");
-const { resolve } = require("path");
+import fs from "fs";
 
 class ProductManager {
   #products = [];
@@ -108,5 +104,5 @@ class ProductManager {
 }
 
 //exportacion de la clase!
-let productManager = new ProductManager("products.txt");
-module.exports = productManager;
+const productManager = new ProductManager("products.txt");
+export { productManager };
