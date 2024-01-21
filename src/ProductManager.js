@@ -48,6 +48,7 @@ class ProductManager {
         const productJSON = JSON.stringify(product) + "\n";
         await fs.promises.appendFile(this.path, productJSON);
         console.log("producto agregado al archivo");
+        return product;
       } else {
         console.log(`El producto con código ${product.code} ya existe.`);
       }
@@ -78,6 +79,7 @@ class ProductManager {
           (product) => JSON.stringify(product) + "\n"
         );
         await fs.promises.writeFile(this.path, productsString);
+        return this.#products[index];
       } else {
         console.log("El ID no esta en la lista de productos!");
       }
