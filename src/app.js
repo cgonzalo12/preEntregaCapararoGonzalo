@@ -5,7 +5,7 @@ import { productsRoutes } from "./routes/products.routes.js";
 const app = express();
 
 app.use(express.json());
-app.use("/products", productsRoutes);
+app.use("/api/products", productsRoutes);
 const port = 8080;
 
 app.listen(port, (req, res) => {

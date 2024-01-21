@@ -1,3 +1,4 @@
 {"title":"producto prueba","description":"este es un producto prueba","price":2000,"thumbnail":"sin imagen","code":"abc123","stock":25,"id":1}
 {"title":"producto prueba2","description":"este es un producto prueba","price":2000,"thumbnail":"sin imagen","code":"abc1234","stock":25,"id":2}
 {"title":"producto prueba3","description":"este es un producto prueba","price":2000,"thumbnail":"sin imagen","code":"abc12347","stock":25,"id":3}
+{"title":"prueba desde posman","description":"description del producto","price":500,"thumbnail":"notiene","code":"a123b","stock":11,"id":4}
