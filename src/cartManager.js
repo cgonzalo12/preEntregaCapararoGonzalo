@@ -1,6 +1,7 @@
+import { log } from "console";
 import fs from "fs";
 
-export class cartManager {
+class cartManager {
   constructor() {
     this.path = "cart.txt";
     this.carts = [];
@@ -32,4 +33,29 @@ export class cartManager {
     await fs.promises.writeFile(this.path, JSON.stringify(this.carts));
     return newCart;
   };
+
+  addProductTheCart = async (cartID, idProduct) => {
+    const listCarts = await this.getCarts();
+    const index = listCarts.findIndex((cart) => cart.id === cartID);
+    if (index !== -1) {
+      cartProducts = await this.getCart(cartID);
+      const productIndex = cartProducts.findIndex(
+        (product) => product.id === idProduct
+      );
+      if (productIndex !== -1) {
+        cartProducts[productIndex].quantity =
+          cartProducts[productIndex].quantity + 1;
+      } else {
+        cartProducts.push({ idProduct, quantity: 1 });
+      }
+      listCarts[index].products = cartProducts;
+      await fs.promises.writeFile(this.path, JSON.stringify(listCarts));
+      console.log("producto agregado exitosamente!!");
+    } else {
+      console.log(`carrito no encontrado con el id: ${cartID}`);
+    }
+  };
 }
+//cart manager
+const CartManager = new cartManager();
+export { CartManager };
