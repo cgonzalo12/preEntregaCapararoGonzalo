@@ -8,10 +8,11 @@ productsRoutes.get("/", async (req, res) => {
     const limit = req.query.limit;
     let products = await productManager.getProducts();
     if (limit) {
-      const limitProducts = products.slice(0, limit);
-      return res.json(limitProducts);
+      const products = products.slice(0, limit);
+      res.render("home", { products, style: "home.css" });
     }
-    return res.json(products);
+    console.log(products);
+    res.render("home", { products, style: "home.css" });
   } catch (error) {
     console.log(error);
     res.send("error !!!");
