@@ -6,6 +6,11 @@ import { cartsRouter } from "./routes/carts.routes.js";
 import { Server } from "socket.io";
 import viewsRouter from "./routes/views.routes.js";
 import { productManager } from "./ProductManager.js";
+import mongoose from "mongoose";
+
+//coneccion a mongoose
+mongoose.connect("mongodb://localhost:27017/backendCoder");
+
 const port = 8080;
 //inicializo express
 const app = express();
@@ -63,7 +68,7 @@ app.use(express.static(__dirname + "/public"));
 
 //milwares request
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true })); //queris
 
 //router products
 app.use("/products", productsRoutes);
