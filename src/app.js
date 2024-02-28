@@ -7,13 +7,50 @@ import { Server } from "socket.io";
 import viewsRouter from "./routes/views.routes.js";
 import { productManager } from "./ProductManager.js";
 import mongoose from "mongoose";
+import routeProducts from "./routes/product.routes.js";
 
-//coneccion a mongoose
-mongoose.connect("mongodb://localhost:27017/backendCoder");
-
-const port = 8080;
 //inicializo express
 const app = express();
+
+//view engine
+app.engine("handlebars", handlebars.engine()); //motor de plantilla
+app.set("views", __dirname + "/views"); //indico donde estan las vistas
+app.set("view engine", "handlebars"); //indica el motor de plantilla q ya iniciamos arriba
+
+//public folder
+app.use(express.static(__dirname + "/public"));
+
+//milwares request
+app.use(express.json());
+app.use(express.urlencoded({ extended: true })); //queris
+
+//---------------------------Router---------------------
+//router products
+app.use("/productsFile", productsRoutes);
+//routes catrs
+app.use("/api/carts", cartsRouter);
+//routes realtime
+app.use("/realtimeproducts", viewsRouter);
+//routes de producto
+app.use("/products", routeProducts);
+
+// Home del sitio
+app.get("/", (req, res) => {
+  res.redirect("/home");
+});
+app.get("/home", (req, res) => {
+  res.render("home");
+});
+
+//paguina error 404
+app.use((req, res, next) => {
+  res.render("404");
+});
+
+//coneccion a mongoose
+mongoose.connect("mongodb://localhost:27017/ecommerce");
+
+const port = 8080;
 
 //socket
 const mensajes = [];
@@ -21,6 +58,7 @@ const mensajes = [];
 const httpServer = app.listen(port, (req, res) => {
   console.log(`escuchando el puerto ${port}`);
 });
+
 const socketServer = new Server(httpServer);
 socketServer.on("connection", (socket) => {
   console.log("nuevo cliente conectado!");
@@ -58,21 +96,3 @@ socketServer.on("connection", (socket) => {
     "este evento esta sicneod escuchado por todos!!!"
   );
 });
-//view engine
-app.engine("handlebars", handlebars.engine()); //motor de plantilla
-app.set("views", __dirname + "/views"); //indico donde estan las vi stas
-app.set("view engine", "handlebars"); //indica el motor de plantilla q ya iniciamos arriba
-
-//public folder
-app.use(express.static(__dirname + "/public"));
-
-//milwares request
-app.use(express.json());
-app.use(express.urlencoded({ extended: true })); //queris
-
-//router products
-app.use("/products", productsRoutes);
-//routes catrs
-app.use("/api/carts", cartsRouter);
-//routes realtime
-app.use("/realtimeproducts", viewsRouter);

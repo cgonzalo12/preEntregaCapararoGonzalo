@@ -1,0 +1,14 @@
+<h1>{{title}}</h1>
+
+<p>{{description}}</p>
+
+{{#if thumbnail}}
+  <center><img src="/images/products/{{thumbnail}}" /></center>
+  <p>{{thumbnail}}</p>
+{{/if}}
+
+{{#if isStock}}
+  <p>Precio: {{price}}</p>
+{{else}}
+  <p>No hay stock del producto</p>
+{{/if}}
