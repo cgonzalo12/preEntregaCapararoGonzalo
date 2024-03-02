@@ -1,5 +1,5 @@
 import express from "express";
-import handlebars from "express-handlebars";
+import { engine } from "express-handlebars";
 import __dirname from "./utils/utils.js";
 import { productsRoutes } from "./routes/products.routes.js";
 import { cartsRouter } from "./routes/carts.routes.js";
@@ -13,12 +13,12 @@ import routeProducts from "./routes/product.routes.js";
 const app = express();
 
 //view engine
-app.engine("handlebars", handlebars.engine()); //motor de plantilla
-app.set("views", __dirname + "/views"); //indico donde estan las vistas
-app.set("view engine", "handlebars"); //indica el motor de plantilla q ya iniciamos arriba
+app.engine("handlebars", engine());
+app.set("view engine", "handlebars");
+app.set("views", "src/views");
 
 //public folder
-app.use(express.static(__dirname + "/public"));
+app.use(express.static("public"));
 
 //milwares request
 app.use(express.json());

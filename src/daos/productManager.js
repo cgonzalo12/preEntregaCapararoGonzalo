@@ -1,4 +1,4 @@
-import { productModel } from "../public/schemas/products.schema.js";
+import { productModel } from "../../public/schemas/products.schema.js";
 
 //traer todos los productos
 class ProductManager {
@@ -29,55 +29,38 @@ class ProductManager {
   }
   //crear un producto
   static async add(title, description, price, thumbnail, code, stock) {
-    if (!title || !description || !price || !thumbnail || !code || !stock) {
-      return false;
-    } else {
-      try {
-        return new productModel({
-          title,
-          description,
-          price,
-          thumbnail,
-          code,
-          stock,
-        }).save();
-      } catch (error) {
-        console.log("problem creating the product: " + error);
-      }
+    try {
+      return new productModel({
+        title,
+        description,
+        price,
+        thumbnail,
+        code,
+        stock,
+      }).save();
+    } catch (error) {
+      console.log("problem creating the product: " + error);
     }
   }
 
   //actualizar producto
   static async update(id, product) {
-    if (
-      !product.title ||
-      !product.description ||
-      !product.price ||
-      !product.thumbnail ||
-      !product.code ||
-      !product.stock
-    ) {
-      return false;
-    } else {
-      try {
-        let updateProduct = await productModel.updateOne({ _id: id }, product);
-        return updateProduct;
-      } catch (error) {
-        console.log("problems updating product in mongo: " + error);
-      }
+    try {
+      return (updateProduct = await productModel.updateOne(
+        { _id: id },
+        product
+      ));
+    } catch (error) {
+      console.log("problems updating product in mongo: " + error);
     }
   }
   //eliminar un producto!
   static async deleteOne(pid) {
-    if (!pid) {
-      return false;
-    } else {
-      try {
-        let deleteProduct = await productModel.deleteOne({ _id: pid });
-        return deleteProduct;
-      } catch (error) {
-        console.log("problems delete product in mongo: " + error);
-      }
+    try {
+      let deleteProduct = await productModel.deleteOne({ _id: pid });
+      return deleteProduct;
+    } catch (error) {
+      console.log("problems delete product in mongo: " + error);
     }
   }
 }
