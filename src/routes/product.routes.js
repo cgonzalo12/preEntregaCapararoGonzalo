@@ -21,6 +21,11 @@ routerProducts.get("/", async (req, res) => {
 routerProducts.get("/new", (req, res) => {
   res.render("new-product");
 });
+// ruta para actualizar producto
+routerProducts.get("/update/:pid", (req, res) => {
+  let { pid } = req.params;
+  res.render("updateProduct", { pid });
+});
 
 // Ruta para mostrar un producto con ID específico
 routerProducts.get("/:id", async (req, res) => {
@@ -31,7 +36,6 @@ routerProducts.get("/:id", async (req, res) => {
   }
 
   let product = await ProductManager.getById(id);
-
   if (!product) {
     res.render("404");
   }
@@ -46,46 +50,6 @@ routerProducts.get("/:id", async (req, res) => {
     isStock: product.stock > 0,
     stock: product.stock,
   });
-});
-
-// actualizar producto
-routerProducts.put("/up/:pid", async (req, res) => {
-  let { pid } = req.params;
-
-  let productsToReplace = req.body;
-  if (
-    !productsToReplace.title ||
-    !productsToReplace.description ||
-    !productsToReplace.price ||
-    !productsToReplace.thumbnail ||
-    !productsToReplace.code ||
-    !productsToReplace.stock ||
-    !pid
-  ) {
-    res.status(400).send({
-      status: 400,
-      result: "error",
-      error: "incomplete values",
-    });
-  }
-
-  try {
-    let result = await ProductManager.update({ _id: pid }, productsToReplace);
-
-    res.status(200).send({
-      status: 200,
-      result: "success",
-      payload: result,
-    });
-  } catch (error) {
-    console.log("Cannon update products on Mongo:" + error);
-    res.status(500).send({
-      status: 500,
-      result: "error",
-      error: "error update data on DB",
-    });
-  }
-  res.redirect("/products");
 });
 
 //eliminar un prodcuto con id
@@ -114,7 +78,38 @@ routerProducts.delete("/del/:pid", async (req, res) => {
   }
   res.redirect("/products/");
 });
+// actualizar producto
+routerProducts.put("/up/:pid", async (req, res) => {
+  let { pid } = req.params;
+  let productsToReplace = req.body;
+  if (
+    !productsToReplace.title ||
+    !productsToReplace.description ||
+    !productsToReplace.price ||
+    !productsToReplace.thumbnail ||
+    !productsToReplace.code ||
+    !productsToReplace.stock ||
+    !pid
+  ) {
+    res.status(400).send({
+      status: 400,
+      result: "error",
+      error: "incomplete values algo no llego",
+    });
+  }
 
+  try {
+    let result = await ProductManager.update({ _id: pid }, productsToReplace);
+  } catch (error) {
+    console.log("Cannon update products on Mongo:" + error);
+    res.status(500).send({
+      status: 500,
+      result: "error",
+      error: "error update data on DB",
+    });
+  }
+  res.redirect("/products");
+});
 //multer para img
 routerProducts.post("/", upload.single("image"), async (req, res) => {
   let filename = req.file.filename;
@@ -130,6 +125,43 @@ routerProducts.post("/", upload.single("image"), async (req, res) => {
   );
 
   res.redirect("/products");
+});
+
+//actualizar
+routerProducts.post("/update/:id", upload.single("image"), async (req, res) => {
+  let pid = req.params.id;
+  let filename = req.file.filename;
+  let product = req.body;
+
+  const productsToReplace = {
+    title: product.title,
+    description: product.description,
+    price: product.price,
+    thumbnail: filename,
+    code: product.code,
+    stock: product.stock,
+  };
+
+  try {
+    const response = await fetch("http://localhost:8080/products/up/" + pid, {
+      method: "PUT",
+      body: JSON.stringify(productsToReplace),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.ok) {
+      // Si la solicitud se completó correctamente, redirigir al usuario
+      res.redirect("/products");
+    } else {
+      // Si hay un error en la respuesta, mostrar un mensaje de error
+      alert("Hubo un error al actualizar el producto.");
+    }
+  } catch (error) {
+    console.error("Error al actualizar el producto:", error);
+    alert("Hubo un error al actualizar el producto.");
+  }
 });
 
 export default routerProducts;

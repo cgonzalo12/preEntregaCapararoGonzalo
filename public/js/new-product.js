@@ -19,9 +19,3 @@ function eliminarProducto(productId) {
       });
   }
 }
-document.addEventListener("DOMContentLoaded", function () {
-  const deleteBtn = document.getElementById("deleteBtn");
-  deleteBtn.addEventListener("click", function () {
-    eliminarProducto(deleteBtn.dataset.productId);
-  });
-});

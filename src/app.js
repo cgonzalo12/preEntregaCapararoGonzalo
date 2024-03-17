@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true })); //queris
 //router products
 app.use("/productsFile", productsRoutes);
 //routes catrs
-app.use("/api/carts", cartsRouter);
+app.use("/carts", cartsRouter);
 //routes realtime
 app.use("/realtimeproducts", viewsRouter);
 //routes de producto

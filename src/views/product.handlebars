@@ -40,11 +40,110 @@
               {{/if}}
 
               <button
-                class="btn btn-primary"
+                class="btn btn-primary m-2"
                 id="deleteBtn"
                 onclick="eliminarProducto('{{_id}}')"
               >Eliminar</button>
+
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+              >
+                Actualizar
+              </button>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Producto</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form
+              action="/products"
+              method="post"
+              enctype="multipart/form-data"
+              class="card-body"
+            >
+              <div>
+                <input
+                  type="text"
+                  name="title"
+                  id="title"
+                  class="form-control mb-3"
+                  placeholder="Titulo del producto"
+                />
+                <textarea
+                  class="form-control mb-3"
+                  name="description"
+                  id="description"
+                  placeholder="Descripción del producto"
+                  rows="6"
+                ></textarea>
+                <input
+                  type="text"
+                  name="code"
+                  id="code"
+                  class="form-control mb-3"
+                  placeholder="codigo del producto"
+                />
+                <input
+                  type="number"
+                  name="price"
+                  id="price"
+                  class="form-control mb-3"
+                  placeholder="Precio del producto"
+                />
+                <input
+                  type="number"
+                  name="stock"
+                  id="stock"
+                  class="form-control mb-3"
+                  placeholder="Stock del producto"
+                />
+                <input
+                  type="file"
+                  name="image"
+                  id="image"
+                  class="form-control mb-3"
+                />
+
+              </div>
+              <div class="card-footer">
+              </div>
+
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >Cerrar</button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              onclick="updateProduct('{{_id}}')"
+            >Guardar cambios</button>
           </div>
         </div>
       </div>
@@ -56,6 +155,5 @@
       crossorigin="anonymous"
     ></script>
     <script src="/js/new-product.js"></script>
-
   </body>
 </html>

@@ -13,7 +13,8 @@ class ProductManager {
   //productos con stock
   static async getAllWhithStock() {
     try {
-      return productModel.find({ stock: { $gt: 0 } }).lean();
+      let productStock = await productModel.find({ stock: { $gt: 0 } }).lean();
+      return productStock;
     } catch (error) {
       console.log("problem loading mongo products: " + error);
     }

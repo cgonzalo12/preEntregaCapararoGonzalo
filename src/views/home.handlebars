@@ -1,20 +1,46 @@
-<div>
-  <h1>Bienvenido a la tienda</h1>
-  <ul>
-    <li><a href="/products">Ver productos</a></li>
-    <li><a href="products/new">Nuevo producto</a></li>
-  </ul>
-
-  {{#each products}}
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Home</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/css/home.css" />
+  </head>
+  <body>
     <div>
-      <h3>Producto</h3>
-      <p>Nombre: {{this.title}}</p>
-      <p>Descripcion: {{this.description}}</p>
-      <p>Codigo: {{this.code}}</p>
-      <p>Precio: {{this.price}}</p>
-      <p>Stock: {{this.stock}}</p>
+      <nav id="navbar" class="navbar navbar-expand-lg text-light">
+        <h2 class="mx-auto text-light">Home</h2>
+      </nav>
     </div>
-  {{/each}}
+    <div>
+      <ul>
+        <li><a href="/products">Ver productos</a></li>
+        <li><a href="products/new">Nuevo producto</a></li>
+        <li><a href="/carts">Ver Carts</a></li>
+      </ul>
 
-</div>
-<script src="/js/home.js"></script>
+      {{#each products}}
+        <div>
+          <h3>Producto</h3>
+          <p>Nombre: {{this.title}}</p>
+          <p>Descripcion: {{this.description}}</p>
+          <p>Codigo: {{this.code}}</p>
+          <p>Precio: {{this.price}}</p>
+          <p>Stock: {{this.stock}}</p>
+        </div>
+      {{/each}}
+
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/js/home.js"></script>
+  </body>
+</html>
