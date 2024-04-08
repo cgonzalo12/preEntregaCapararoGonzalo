@@ -24,20 +24,32 @@
             <div class="card-body">
               <h2>Carrito</h2>
               <div>
-                <h5 class="card-title">{{cart.idUser}}</h5>
-                   {{#each cart.products}}
+                <h5 class="card-title">{{_id}}</h5>
+                   {{#each products}}
+                   
                     <li class="list-group-item text-center">
                       <a
-                        href="/carts"
+                        href="/products/{{_id}}"
                         class="btn btn-primary w-50 m-2"
-                      >{{this}} </a>
-                  {{/each}} 
+                      >{{title}} </a>
+                      
+                      <a
+                        onclick="deleteTheCart('{{../_id}}','{{_id}}')"
+                        class="btn btn-danger w-50 m-2"
+                      >Eliminar de cart</a>
+                    </li> 
+                  {{/each}}
+                <button
+                data-cid="{{_id}}"
+                id="btnClearCart"
+                class="btn btn-primary w-50 m-2"
+                >Borrar todo</button>
               </div>
               <div>
                 <button
                 class="btn btn-primary m-2 "
                 id="deleteBtn"
-                onclick="eliminarProducto('{{_id}}')"
+                onclick=""
                 >Terminar Compra</button>
               </div>
               
@@ -53,6 +65,6 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
-    <script src="/js/new-product.js"></script>
+        <script src="/js/cart.js"></script>
   </body>
 </html>

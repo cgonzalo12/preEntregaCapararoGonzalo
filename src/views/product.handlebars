@@ -39,11 +39,7 @@
                 <p>No hay stock del producto</p>
               {{/if}}
 
-              <button
-                class="btn btn-primary m-2"
-                id="deleteBtn"
-                onclick="eliminarProducto('{{_id}}')"
-              >Eliminar</button>
+              
 
               <button
                 type="button"
@@ -53,6 +49,17 @@
               >
                 Actualizar
               </button>
+              <button
+              class="btn btn-primary"
+              id="btnAgregarCart"
+              data-pid="{{_id}}">
+              Agregar Al carrito
+              </button>
+              <button
+                class="btn btn-danger m-2"
+                id="deleteBtn"
+                onclick="eliminarProducto('{{_id}}')"
+              >Eliminar</button>
             </div>
           </div>
         </div>
@@ -79,7 +86,7 @@
           </div>
           <div class="modal-body">
             <form
-              action="/products"
+              action="/products/update/{{_id}}"
               method="post"
               enctype="multipart/form-data"
               class="card-body"
@@ -114,6 +121,13 @@
                   placeholder="Precio del producto"
                 />
                 <input
+                  type="text"
+                  name="categoria"
+                  id="categoria"
+                  class="form-control mb-3"
+                  placeholder="Categoria"
+                />
+                <input
                   type="number"
                   name="stock"
                   id="stock"
@@ -126,25 +140,23 @@
                   id="image"
                   class="form-control mb-3"
                 />
-
+                
               </div>
-              <div class="card-footer">
+              <div class="modal-footer">
+                <input
+                  type="submit"
+                  value="Actualizar"
+                  class="btn btn-primary"
+                />
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >Cerrar</button>
               </div>
-
             </form>
           </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >Cerrar</button>
-            <button
-              type="button"
-              class="btn btn-primary"
-              onclick="updateProduct('{{_id}}')"
-            >Guardar cambios</button>
-          </div>
+          
         </div>
       </div>
     </div>
@@ -154,6 +166,6 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
-    <script src="/js/new-product.js"></script>
+    <script src="/js/product.js"></script>
   </body>
 </html>

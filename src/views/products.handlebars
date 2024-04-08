@@ -42,8 +42,17 @@
                 productos</a>
             </li>
             <li class="nav-item">
-              <a href="/products?stock" class="nav-link active">Ver solo con
+              <a href="/products?stock=true" class="nav-link active">Ver solo con
                 stock</a>
+            </li>
+            <li class="nav-item">
+              <a href="/products?categoria=plato" class="nav-link active">Platos</a>
+            </li>
+            <li class="nav-item">
+              <a href="/products?categoria=set" class="nav-link active">Set</a>
+            </li>
+            <li class="nav-item">
+              <a href="/products?categoria=otros" class="nav-link active">Otros</a>
             </li>
           </ul>
         </div>
@@ -54,32 +63,63 @@
       <div
         class="row row-cols-1 row-cols-md-2 row-cols-lg-2 justify-content-center"
       >
-        <div class="col mb-3">
-          <div class="card">
-            <div class="card-header text-light" id="card-header">
-              Productos
-            </div>
-            <div class="card-body" id="show-products">
-              <div class="container">
-                <ul class="list-group list-group-flush">
-
-                  {{#each products}}
-                    <li class="list-group-item text-center">
-                      <a
-                        href="/products/{{this._id}}"
-                        class="btn btn-primary w-50"
-                      >{{this.title}} </a>
-                      <a
-                        href="/products/update/{{this._id}}"
-                        class="btn btn-primary w-20 m-2"
-                      >actualizar</a>
-                    </li>
-
-                  {{/each}}
-                </ul>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header text-light" id="card-header">
+                Filtros
+              </div>
+              <div class="card-body" id="show-products">
+                <div class="container">
+                  <ul class="list-group list-group-flush">
+                    
+                      <li class="list-group-item text-center">
+                        <h4>Stock</h4>
+                        <a href="/products" class="nav-link active">Ver todos los  productos</a>
+                        <a href="/products?limit=5" class="nav-link active">x5</a>
+                        <a href="/products?limit=2" class="nav-link active">x2</a>
+                        <a href="/products?stock=true" class="nav-link active">Ver solo con stock</a>
+                        <h4>Categorias</h4>
+                        <a href="/products?categoria=plato" class="nav-link active">Platos</a>
+                        <a href="/products?categoria=set" class="nav-link active">Set</a>
+                        <a href="/products?categoria=otros" class="nav-link active">Otros</a>
+                      </li>
+                    
+                  </ul>
+                </div>
               </div>
             </div>
-
+          </div>
+          
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header text-light" id="card-header">
+                Productos
+              </div>
+              <div class="card-body" id="show-products">
+                <div class="container">
+                  <ul class="list-group list-group-flush">
+                    {{#each products.docs}}
+                      <li class="list-group-item text-center">
+                        <a href="/products/{{this._id}}" class="btn btn-primary w-30">{{this.title}}</a>
+                        <a href="/products/update/{{this._id}}" class="btn btn-primary w-20 m-2">actualizar</a>
+                        <a onclick="addThoCart('{{this._id}}')" class="btn btn-danger w-20 m-2">agregar al carrito</a>
+                      </li>
+                    {{/each}}
+                  </ul>
+                </div>
+                <div class="container">
+                  <div class="text-center">
+                    {{#if products.hasPrevPage}}
+                      <a href={{products.prevLink}}>Anterior</a>
+                    {{/if}}
+                    {{#if products.hasNextPage}}
+                      <a href={{products.nextLink}}>Siguiente</a>
+                    {{/if}}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -90,5 +130,6 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
+        <script src="/js/product.js"></script>
   </body>
 </html>

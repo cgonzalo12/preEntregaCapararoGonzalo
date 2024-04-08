@@ -26,7 +26,7 @@ class cartManager {
   //traer carrito con id
   static async getCart(id) {
     try {
-      let cart = await cartModel.findOne({ _id: id }).lean();
+      let cart = await cartModel.findOne({ _id: id }).populate("idProducts.idProducts").lean();
       return cart;
     } catch (error) {
       console.log("problem loading mongo product: " + error);
@@ -36,13 +36,47 @@ class cartManager {
   static async addProductTheCart(idCart, idProduct) {
     try {
       let cartUpdate = await this.getCart(idCart);
-      cartUpdate.products.push(idProduct);
+      cartUpdate.idProducts.push({idProducts:idProduct})
       const update = await cartModel.updateOne({ _id: idCart }, cartUpdate);
     } catch (error) {
       console.log("problem update the cart: " + error);
     }
-    return update;
   }
+  //eliminar producto en cart
+  static async deleteProductTheCart(idCart, idProduct) {
+    try {
+      let cartUpdate = await this.getCart(idCart);
+
+      cartUpdate.idProducts = cartUpdate.idProducts.filter(productId => productId.idProducts._id.toString() !== idProduct);
+  
+   
+      const update = await cartModel.updateOne({ _id: idCart }, cartUpdate);
+    } catch (error) {
+      console.log("problem update the cart: " + error);
+    }
+  }
+  //eliminar productos del carrito
+  static async deleteAllProductt(idCart){
+    try {
+      let cartUpdate = await this.getCart(idCart);
+      cartUpdate.idProducts = [];
+      const update = await cartModel.updateOne({ _id: idCart }, cartUpdate);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  
+  //eliminar cart
+  static async deleteCart(idCart){
+    try {
+      const cartDelete=await cartModel.deleteOne({_id : idCart});
+      return cartDelete;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
 }
 
 export default cartManager;

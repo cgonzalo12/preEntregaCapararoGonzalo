@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, query } from "express";
 import ProductManager from "../daos/productManager.js";
 import upload from "../utils/upload.middleware.js";
 
@@ -7,16 +7,23 @@ const routerProducts = Router();
 //traer todos los productos y filtro de los que tienen sotck (mirar la parte de filtros /products?stock )
 routerProducts.get("/", async (req, res) => {
   let withStock = req.query.stock;
-
+  let limit=req.query.limit;
+  let categoria=req.query.categoria;
+  let page=parseInt(req.query.pages)
+  let sort=req.query.sort;
+  sort=sort?sort:1;
+  page=page?page:1;
+  limit=limit?limit:10;
   let products;
-  if (withStock === undefined) {
-    products = await ProductManager.getAll();
-  } else {
-    products = await ProductManager.getAllWhithStock();
+  try {
+    products = await ProductManager.getAll(page,limit,withStock,categoria,sort);
+    res.render("products", { products });
+  } catch (error) {
+    console.log("cannon get products from mongo: " + error)
   }
-
-  res.render("products", { products });
+  
 });
+
 // Ruta para crear un nuevo producto
 routerProducts.get("/new", (req, res) => {
   res.render("new-product");
@@ -34,22 +41,25 @@ routerProducts.get("/:id", async (req, res) => {
   if (!id) {
     res.redirect("/products/");
   }
-
-  let product = await ProductManager.getById(id);
-  if (!product) {
-    res.render("404");
+  try {
+    let product = await ProductManager.getById(id);
+    if (!product) {
+     res.render("404");
+    }
+    res.render("product", {
+      _id: id,
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      thumbnail: product.thumbnail,
+      code: product.code,
+      isStock: product.stock > 0,
+      stock: product.stock,
+    });
+  } catch (error) {
+    console.log("cannon get product from mongo: "+ error);
   }
-
-  res.render("product", {
-    _id: id,
-    title: product.title,
-    description: product.description,
-    price: product.price,
-    thumbnail: product.thumbnail,
-    code: product.code,
-    isStock: product.stock > 0,
-    stock: product.stock,
-  });
+  
 });
 
 //eliminar un prodcuto con id
@@ -114,15 +124,20 @@ routerProducts.put("/up/:pid", async (req, res) => {
 routerProducts.post("/", upload.single("image"), async (req, res) => {
   let filename = req.file.filename;
   let product = req.body;
-
-  await ProductManager.add(
-    product.title,
-    product.description,
-    product.price,
-    filename,
-    product.code,
-    product.stock
-  );
+  try {
+    await ProductManager.add(
+      product.title,
+      product.description,
+      product.price,
+      product.categoria,
+      filename,
+      product.code,
+      product.stock
+    );
+  } catch (error) {
+    console.log("cannon upload product from mongo: "+ error);
+  }
+  
 
   res.redirect("/products");
 });

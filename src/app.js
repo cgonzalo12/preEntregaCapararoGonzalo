@@ -9,6 +9,8 @@ import { productManager } from "./ProductManager.js";
 import mongoose from "mongoose";
 import routeProducts from "./routes/product.routes.js";
 
+
+
 //inicializo express
 const app = express();
 
@@ -19,6 +21,10 @@ app.set("views", "src/views");
 
 //public folder
 app.use(express.static("public"));
+
+
+
+
 
 //milwares request
 app.use(express.json());

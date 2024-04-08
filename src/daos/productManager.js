@@ -2,10 +2,39 @@ import { productModel } from "../../public/schemas/products.schema.js";
 
 //traer todos los productos
 class ProductManager {
-  static async getAll() {
+  static async getAll(page, limit,_stock,_categoria) {
     try {
-      let products = await productModel.find().lean();
-      return products;
+      if (_stock == undefined) {
+        if (_categoria==undefined) {
+          let products = await productModel.paginate({ }, { limit: limit, page: page, lean: true,sort: { price: 1 } });
+          products.prevLink=products.hasPrevPage? `http://localhost:8080/products?pages=${products.prevPage}&limit=${limit}`:'';
+          products.nextLink=products.hasNextPage? `http://localhost:8080/products?pages=${products.nextPage}&limit=${limit}`:'';
+          return products;
+        }else{
+          let query={categoria:_categoria};
+
+          let products = await productModel.paginate(query, { limit: limit, page: page, lean: true ,sort: { price: 1 }});
+          products.prevLink=products.hasPrevPage? `http://localhost:8080/products?pages=${products.prevPage}&limit=${limit}&categoria=${_categoria}`:'';
+          products.nextLink=products.hasNextPage? `http://localhost:8080/products?pages=${products.nextPage}&limit=${limit}&categoria=${_categoria}`:'';
+
+          return products;
+        }
+      } else {
+        if (_categoria==undefined) {
+          let products = await productModel.paginate({stock: { $gt: 0 }}, { limit: limit, page: page, lean: true,sort: { price: 1 }});
+          products.prevLink=products.hasPrevPage? `http://localhost:8080/products?pages=${products.prevPage}&limit=${limit}&stock=${_stock}`:'';
+          products.nextLink=products.hasNextPage? `http://localhost:8080/products?pages=${products.nextPage}&limit=${limit}&stock=${_stock}`:'';
+         return products;
+        }else{
+          let query={categoria:_categoria};
+      
+          let products = await productModel.paginate({stock: { $gt: 0 },query}, { limit: limit, page: page, lean: true,sort: { price: 1 } });
+          products.prevLink=products.hasPrevPage? `http://localhost:8080/products?pages=${products.prevPage}&limit=${limit}&categoria=${_categoria}&stock=${_stock}`:'';
+          products.nextLink=products.hasNextPage? `http://localhost:8080/products?pages=${products.nextPage}&limit=${limit}&categoria=${_categoria}&stock=${_stock}`:'';
+          return products;
+        }
+        
+      }
     } catch (error) {
       console.log("problem loading mongo products: " + error);
     }
@@ -29,12 +58,13 @@ class ProductManager {
     }
   }
   //crear un producto
-  static async add(title, description, price, thumbnail, code, stock) {
+  static async add(title, description, price,categoria, thumbnail, code, stock) {
     try {
       return new productModel({
         title,
         description,
         price,
+        categoria,
         thumbnail,
         code,
         stock,
