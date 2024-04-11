@@ -121,4 +121,3 @@ socketServer.on("connection", (socket) => {
     "este evento esta sicneod escuchado por todos!!!"
   );
 });
-agrege esto al final
