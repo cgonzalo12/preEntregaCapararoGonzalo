@@ -8,6 +8,11 @@ import viewsRouter from "./routes/views.routes.js";
 import { productManager } from "./ProductManager.js";
 import mongoose from "mongoose";
 import routeProducts from "./routes/product.routes.js";
+//------
+import cookieParser from "cookie-parser";
+import session from "express-session";
+import MongoStore from "connect-mongo";
+import sessionRouter from "./routes/session.routes.js";
 
 
 
@@ -22,13 +27,26 @@ app.set("views", "src/views");
 //public folder
 app.use(express.static("public"));
 
-
-
-
-
 //milwares request
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); //queris
+
+//cookie-parser
+app.use(cookieParser());
+
+
+//session
+app.use(session({
+  store:MongoStore.create({
+    mongoUrl:"mongodb://localhost:27017/ecommerce",
+    ttl:40000
+
+  }),
+  secret:"secretCode",
+  resave:true,
+  saveUninitialized:true
+}))
+
 
 //---------------------------Router---------------------
 //router products
@@ -39,7 +57,8 @@ app.use("/carts", cartsRouter);
 app.use("/realtimeproducts", viewsRouter);
 //routes de producto
 app.use("/products", routeProducts);
-
+//router de session
+app.use("/session",sessionRouter)
 // Home del sitio
 app.get("/", (req, res) => {
   res.redirect("/home");
