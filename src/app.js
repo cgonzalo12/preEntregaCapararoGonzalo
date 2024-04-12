@@ -12,7 +12,7 @@ import routeProducts from "./routes/product.routes.js";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import MongoStore from "connect-mongo";
-import sessionRouter from "./routes/session.routes.js";
+
 
 
 
@@ -58,19 +58,10 @@ app.use("/realtimeproducts", viewsRouter);
 //routes de producto
 app.use("/products", routeProducts);
 //router de session
-app.use("/session",sessionRouter)
+// app.use("/session",sessionRouter)
 // Home del sitio
-app.get("/", (req, res) => {
-  res.redirect("/home");
-});
-app.get("/home", (req, res) => {
-  res.render("home");
-});
+app.use("/", viewsRouter);
 
-//paguina error 404
-app.use((req, res, next) => {
-  res.render("404");
-});
 
 //coneccion a mongoose
 mongoose.connect("mongodb://localhost:27017/ecommerce");
