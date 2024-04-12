@@ -1,7 +1,7 @@
 
 import usersSchema from "../../public/schemas/users.schema.js";
 class sessionManager{
-    static async getUser(email){
+    static async getUserByEmail(email){
         try {
             return await usersSchema.findOne({email:email});
         } catch (error) {
@@ -18,7 +18,7 @@ class sessionManager{
 
     static async insertUser(first_name, last_name, age, email, password){
         try {
-            return await usersSchema.create({first_name, last_name, age, email, password});
+            return (await usersSchema.create({first_name, last_name, age, email, password})).save();
         } catch (error) {
             console.log("error creating user: " + error);
         }
