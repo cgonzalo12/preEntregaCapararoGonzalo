@@ -23,6 +23,15 @@ class cartManager {
       console.log("problem get the carts: " + error);
     }
   }
+  //traer carrito con id de usuario
+  static async getCartByUser(idUser) {
+    try {
+      let cart = await cartModel.findOne({ idUser: idUser }).populate("idProducts.idProducts").lean();
+      return cart;
+    } catch (error) {
+      console.log("problem loading mongo product: " + error);
+    }
+  }
   //traer carrito con id
   static async getCart(id) {
     try {

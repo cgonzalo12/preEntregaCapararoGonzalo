@@ -22,6 +22,10 @@ const UsersSchema = new mongoose.Schema({
     type: String,
     required:true
   },
+  rol:{
+    type: String,
+    default: "user"
+  }
 });
 
 export default mongoose.model("Users",UsersSchema);

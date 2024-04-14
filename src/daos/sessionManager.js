@@ -3,7 +3,7 @@ import usersSchema from "../../public/schemas/users.schema.js";
 class sessionManager{
     static async getUserByEmail(email){
         try {
-            return await usersSchema.findOne({email:email});
+            return await usersSchema.findOne({email:email}).lean();
         } catch (error) {
             console.log("error getting user: " + error);
         }

@@ -2,6 +2,9 @@ import cartManager from "../daos/cartManager.js";
 import { Router } from "express";
 
 const cartsRouter = Router();
+
+
+
 //traer carts
 cartsRouter.get("/", async (req, res) => {
   try {
@@ -12,13 +15,16 @@ cartsRouter.get("/", async (req, res) => {
     console.log("Error al cargar las carts " + error);
   }
 });
-//crear un cart ( no sirve?)
-cartsRouter.post("/:idUser", async (req, res) => {
+//traer un car con id user
+cartsRouter.get("/:idUser", async (req, res) => {
   const idUser = req.params.idUser;
-  let cart = [];
   try {
-    const response = await cartManager.add(idUser, cart);
-    res.redirect("/carts");
+    const cart = await cartManager.getCartByUser(idUser);
+    const products = cart.idProducts.map(item => item.idProducts);
+    res.render("cart", { _id: idUser,
+      idUser: cart.idUser,
+      products: products
+    });
   } catch (error) {
     res.send("error al crear carrito");
   }
@@ -39,6 +45,7 @@ cartsRouter.get("/cart/:idCart", async (req, res) => {
     res.send(`error id no valido ${id}`);
   }
 });
+
 //Agregar producto al cart
 cartsRouter.put("/:idCart/product/:pid", async (req, res) => {
   const idCart = req.params.idCart;

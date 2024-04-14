@@ -1,11 +1,14 @@
 import { Router, query } from "express";
 import ProductManager from "../daos/productManager.js";
 import upload from "../utils/upload.middleware.js";
+import sessionManager from "../daos/sessionManager.js";
+import cartManager from "../daos/cartManager.js";
 
 const routerProducts = Router();
 
 //traer todos los productos y filtro de los que tienen sotck (mirar la parte de filtros /products?stock )
 routerProducts.get("/", async (req, res) => {
+  let session = req.session.user;
   let withStock = req.query.stock;
   let limit=req.query.limit;
   let categoria=req.query.categoria;
@@ -17,7 +20,18 @@ routerProducts.get("/", async (req, res) => {
   let products;
   try {
     products = await ProductManager.getAll(page,limit,withStock,categoria,sort);
-    res.render("products", { products });
+    if (session) {
+      let user = await sessionManager.getUserById(session);
+      let cart = await cartManager.getCartByUser(session);
+      let idCart=cart?cart._id:"";
+      products.docs.forEach(product => {
+        product.idCart = idCart;
+    });
+      user.exist=true;
+      res.render("products", { products, user});
+    }else{
+      res.render("products", { products });
+    }
   } catch (error) {
     console.log("cannon get products from mongo: " + error)
   }

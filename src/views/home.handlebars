@@ -15,33 +15,33 @@
     <div>
       <nav id="navbar" class="navbar navbar-expand-lg text-light">
         <h2 class="mx-auto text-light">Home</h2>
-        <ul>
+        <ul class="m-2">
         <li>
+          {{#if user}}
+          <a href="/profile">Perfil</a>
+          <a href="/session/logout">Cerrar sesion</a>
+          <a href="/carts/{{user._id}}"></a>
+          {{else}}
           <a href="/login">Iniciar Sesion</a>
           <a href="/register">Registrarce</a>
+          
+          {{/if}}
+          
         </li>
       </ul>
       </nav>
     </div>
     <div>
+      <h2>Bienvenido {{user.first_name}} </h2>
+    </div>
+
+    <div>
       <ul>
         <li><a href="/products">Ver productos</a></li>
         <li><a href="products/new">Nuevo producto</a></li>
         <li><a href="/carts">Ver Carts</a></li>
+        <li><a href="/carts/{{user._id}}">ver cart</a></li>
       </ul>
-      
-
-      {{#each products}}
-        <div>
-          <h3>Producto</h3>
-          <p>Nombre: {{this.title}}</p>
-          <p>Descripcion: {{this.description}}</p>
-          <p>Codigo: {{this.code}}</p>
-          <p>Precio: {{this.price}}</p>
-          <p>Stock: {{this.stock}}</p>
-        </div>
-      {{/each}}
-
     </div>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

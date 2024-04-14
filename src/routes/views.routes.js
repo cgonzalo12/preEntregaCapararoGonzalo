@@ -1,4 +1,5 @@
 import { Router } from "express";
+import sessionManager from "../daos/sessionManager.js";
 
 const viewsRouter = Router();
 
@@ -25,11 +26,33 @@ viewsRouter.get("/profile", async(req, res) => {
 })
 
 // Home del sitio
-viewsRouter.get("/", (req, res) => {
-  res.redirect("/home");
+viewsRouter.get("/", async(req, res) => {
+  if (req.session.user) {
+    try {
+      let user = await sessionManager.getUserById(req.session.user);
+      res.render("home", { user });
+    } catch (error) {
+      console.log("error getting user: " + error);
+    }
+  }else{
+    res.redirect("/home");
+  }
+
 });
-viewsRouter.get("/home", (req, res) => {
+
+
+
+viewsRouter.get("/home", async(req, res) => {
+  if (req.session.user) {
+    try {
+      let user = await sessionManager.getUserById(req.session.user);
+      res.render("home", { user });
+    } catch (error) {
+      console.log("error getting user: " + error);
+    }
+  }else{
   res.render("home");
+  }
 });
 
 //paguina error 404

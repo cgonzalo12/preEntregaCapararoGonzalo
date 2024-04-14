@@ -1,3 +1,4 @@
+
 function eliminarProducto(productId) {
   if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
     fetch("/products/del/" + productId, {
@@ -33,10 +34,9 @@ btnAgregarCart.addEventListener("click", async () => {
     }
 });
 
-
-function addThoCart(productId) {
-  if (confirm("¿Estás seguro de que deseas agregar este producto?")) {
-    fetch("/carts/661072a4b54f0e51af586bfa/product/" + productId, {
+async function addThoCart(productId,cartId) {
+  if (confirm("¿Estás seguro de que deseas agregar este producto? "+cartId)) {
+    fetch("/carts/"+cartId+"/product/" + productId, {
       method: "put",
       headers: {
         "Content-Type": "application/json",

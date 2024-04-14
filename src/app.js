@@ -8,6 +8,7 @@ import viewsRouter from "./routes/views.routes.js";
 import { productManager } from "./ProductManager.js";
 import mongoose from "mongoose";
 import routeProducts from "./routes/product.routes.js";
+import sessionRouter from "./routes/session.routes.js";
 //------
 import cookieParser from "cookie-parser";
 import session from "express-session";
@@ -58,7 +59,7 @@ app.use("/realtimeproducts", viewsRouter);
 //routes de producto
 app.use("/products", routeProducts);
 //router de session
-// app.use("/session",sessionRouter)
+app.use("/session",sessionRouter)
 // Home del sitio
 app.use("/", viewsRouter);
 
