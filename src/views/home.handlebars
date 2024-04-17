@@ -18,7 +18,7 @@
         <ul class="m-2">
         <li>
           {{#if user}}
-          <a href="/profile">Perfil</a>
+          <a href="/current">Perfil</a>
           <a href="/session/logout">Cerrar sesion</a>
           <a href="/carts/{{user._id}}"></a>
           {{else}}
@@ -32,14 +32,17 @@
       </nav>
     </div>
     <div>
-      <h2>Bienvenido {{user.first_name}} </h2>
+      <h2>Bienvenido {{user.first_name}}</h2>
     </div>
 
     <div>
       <ul>
         <li><a href="/products">Ver productos</a></li>
-        <li><a href="products/new">Nuevo producto</a></li>
-        <li><a href="/carts">Ver Carts</a></li>
+        {{#if admin}}
+          <li><a href="products/new">Nuevo producto</a></li>
+          <li><a href="/carts">Ver Carts</a></li>
+        {{/if}}
+        
         <li><a href="/carts/{{user._id}}">ver cart</a></li>
       </ul>
     </div>

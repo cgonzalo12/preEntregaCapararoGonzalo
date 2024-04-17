@@ -16,8 +16,12 @@ viewsRouter.get("/login", (req, res) => {
   }
 })
 
-viewsRouter.get("/profile", async(req, res) => {
+viewsRouter.get("/current", async(req, res) => {
   if (req.session.user) {
+      if (req.signedCookies.user == false) {
+        res.clearCookie("user")
+      }
+      console.log(req.signedCookies.user);
       let user = await sessionManager.getUserById(req.session.user);
       res.render("profile",{user});
   }else{
@@ -30,7 +34,11 @@ viewsRouter.get("/", async(req, res) => {
   if (req.session.user) {
     try {
       let user = await sessionManager.getUserById(req.session.user);
-      res.render("home", { user });
+      if (user.rol == "admin") {
+        res.render("home", { user, admin: true });
+      }else{
+      res.render("home", { user }) 
+    };
     } catch (error) {
       console.log("error getting user: " + error);
     }
@@ -46,7 +54,11 @@ viewsRouter.get("/home", async(req, res) => {
   if (req.session.user) {
     try {
       let user = await sessionManager.getUserById(req.session.user);
-      res.render("home", { user });
+      if (user.rol == "admin") {
+        res.render("home", { user, admin: true });
+      }else{
+      res.render("home", { user }) 
+    };
     } catch (error) {
       console.log("error getting user: " + error);
     }

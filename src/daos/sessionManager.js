@@ -25,7 +25,7 @@ class sessionManager{
     }
     static async getUserById(id){
         try {
-            return await usersSchema.findById({_id:id},{first_name:1, last_name:1, age:1, email:1}).lean();
+            return await usersSchema.findById({_id:id},{first_name:1, last_name:1, age:1, email:1,rol:1}).lean();
         } catch (error) {
             console.log("error getting user: " + error);
         }

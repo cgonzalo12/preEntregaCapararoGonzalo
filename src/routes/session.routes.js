@@ -46,7 +46,8 @@ sessionRouter.post("/login", async(req, res) => {
             res.redirect("/login");
         }else{
             req.session.user = user._id;
-            res.redirect("/profile");
+            res.cookie("user", user,{maxAge:10000000,signed:true});
+            res.redirect("/products");
         }
     } catch (error) {
         console.log("error getting user: " + error);
@@ -55,6 +56,7 @@ sessionRouter.post("/login", async(req, res) => {
 })
 
 sessionRouter.get("/logout", (req, res) => {
+    res.clearCookie("user")
     req.session.destroy((err)=>{
         res.redirect("/home");
     });
