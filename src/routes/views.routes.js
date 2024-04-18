@@ -21,7 +21,6 @@ viewsRouter.get("/current", async(req, res) => {
       if (req.signedCookies.user == false) {
         res.clearCookie("user")
       }
-      console.log(req.signedCookies.user);
       let user = await sessionManager.getUserById(req.session.user);
       res.render("profile",{user});
   }else{

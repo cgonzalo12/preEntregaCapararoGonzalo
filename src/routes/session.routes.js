@@ -1,6 +1,8 @@
 import { Router } from "express";
 import sessionManager from "../daos/sessionManager.js";
 import cartManager from "../daos/cartManager.js";
+import { createHash, isValidPassword } from "../../public/js/encryption.js";
+import { stringify } from "uuid";
 
 const sessionRouter = Router();
 
@@ -23,7 +25,7 @@ sessionRouter.post("/register", async(req, res) => {
          
             res.redirect("/register");
         }else{
-            await sessionManager.insertUser(first_name, last_name, age, email, password);
+            await sessionManager.insertUser(first_name, last_name, age, email,createHash(password) );
             let user = await sessionManager.getUserByEmail(email);
             cartManager.add(user._id, []);
             res.redirect("/login");
@@ -41,14 +43,20 @@ sessionRouter.post("/login", async(req, res) => {
         res.redirect("/login");
     }
     try {
-        let user = await sessionManager.getUserByCreds(email, password);
+        let user = await sessionManager.getUserByEmail(email);
         if (!user) {
             res.redirect("/login");
-        }else{
+        }
+        if (isValidPassword(user,password)) {
             req.session.user = user._id;
             res.cookie("user", user,{maxAge:10000000,signed:true});
             res.redirect("/products");
+            
+        }else{
+            res.redirect("/login");
         }
+         
+        
     } catch (error) {
         console.log("error getting user: " + error);
     }
