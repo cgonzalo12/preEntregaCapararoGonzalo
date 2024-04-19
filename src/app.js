@@ -9,16 +9,19 @@ import { productManager } from "./ProductManager.js";
 import mongoose from "mongoose";
 import routeProducts from "./routes/product.routes.js";
 import sessionRouter from "./routes/session.routes.js";
-//------
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import MongoStore from "connect-mongo";
+import passport from "passport";
+import  initializePassport  from "./utils/passport.config.js";
 
 
 
 
 //inicializo express
 const app = express();
+
+
 
 //view engine
 app.engine("handlebars", engine());
@@ -47,6 +50,13 @@ app.use(session({
   resave:true,
   saveUninitialized:true
 }))
+
+//passport
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 
 
 //---------------------------Router---------------------
