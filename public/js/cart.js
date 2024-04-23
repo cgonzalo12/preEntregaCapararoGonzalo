@@ -1,7 +1,6 @@
 function deleteTheCart(cartId,productId) {
-  console.log("/carts/"+cartId+"/product/" + productId);
-    if (confirm("¿Estás seguro de que deseas agregar este producto?")) {
-      fetch("/carts/"+cartId+"/product/" + productId, {
+    if (confirm("¿Estás seguro de que deseas agregar este producto? ")) {
+      fetch("/carts/"+cartId+"/product/"+productId, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

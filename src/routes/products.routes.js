@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, application } from "express";
 import { productManager } from "../ProductManager.js";
 import { Product } from "../Product.js";
 const productsRoutes = Router();
@@ -11,7 +11,7 @@ productsRoutes.get("/", async (req, res) => {
       const products = products.slice(0, limit);
       res.render("home", { products, style: "home.css" });
     }
-    console.log(products);
+
     res.render("home", { products, style: "home.css" });
   } catch (error) {
     console.log(error);

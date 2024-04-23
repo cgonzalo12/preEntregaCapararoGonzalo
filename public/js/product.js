@@ -35,7 +35,7 @@ btnAgregarCart.addEventListener("click", async () => {
 });
 
 async function addThoCart(productId,cartId) {
-  if (confirm("¿Estás seguro de que deseas agregar este producto? "+cartId)) {
+  if (confirm("¿Estás seguro de que deseas agregar este producto? ")) {
     fetch("/carts/"+cartId+"/product/" + productId, {
       method: "put",
       headers: {

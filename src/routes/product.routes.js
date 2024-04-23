@@ -3,12 +3,11 @@ import ProductManager from "../daos/productManager.js";
 import upload from "../utils/upload.middleware.js";
 import sessionManager from "../daos/sessionManager.js";
 import cartManager from "../daos/cartManager.js";
+import { authToken } from "../utils/jwt.config.js";
+
 
 const routerProducts = Router();
-
-//traer todos los productos y filtro de los que tienen sotck (mirar la parte de filtros /products?stock )
-routerProducts.get("/", async (req, res) => {
-  let session = req.session.user;
+routerProducts.get("/",authToken, async (req, res) => {
   let withStock = req.query.stock;
   let limit=req.query.limit;
   let categoria=req.query.categoria;
@@ -20,9 +19,9 @@ routerProducts.get("/", async (req, res) => {
   let products;
   try {
     products = await ProductManager.getAll(page,limit,withStock,categoria,sort);
-    if (session) {
-      let user = await sessionManager.getUserById(session);
-      let cart = await cartManager.getCartByUser(session);
+    if (req.user) {
+      let user = await sessionManager.getUserById(req.user._id);
+      let cart = await cartManager.getCartByUser(req.user._id);
       let idCart=cart?cart._id:"";
       products.docs.forEach(product => {
         product.idCart = idCart;
@@ -37,6 +36,8 @@ routerProducts.get("/", async (req, res) => {
   }
   
 });
+
+
 
 // Ruta para crear un nuevo producto
 routerProducts.get("/new", (req, res) => {
@@ -192,5 +193,40 @@ routerProducts.post("/update/:id", upload.single("image"), async (req, res) => {
     alert("Hubo un error al actualizar el producto.");
   }
 });
+
+
+//traer todos los productos y filtro de los que tienen sotck (mirar la parte de filtros /products?stock )
+//sin jwt con session
+
+// routerProducts.get("/", async (req, res) => {
+//   let session = req.session.user;
+//   let withStock = req.query.stock;
+//   let limit=req.query.limit;
+//   let categoria=req.query.categoria;
+//   let page=parseInt(req.query.pages)
+//   let sort=req.query.sort;
+//   sort=sort?sort:1;
+//   page=page?page:1;
+//   limit=limit?limit:10;
+//   let products;
+//   try {
+//     products = await ProductManager.getAll(page,limit,withStock,categoria,sort);
+//     if (session) {
+//       let user = await sessionManager.getUserById(session);
+//       let cart = await cartManager.getCartByUser(session);
+//       let idCart=cart?cart._id:"";
+//       products.docs.forEach(product => {
+//         product.idCart = idCart;
+//     });
+//       user.exist=true;
+//       res.render("products", { products, user});
+//     }else{
+//       res.render("products", { products });
+//     }
+//   } catch (error) {
+//     console.log("cannon get products from mongo: " + error)
+//   }
+  
+// });
 
 export default routerProducts;

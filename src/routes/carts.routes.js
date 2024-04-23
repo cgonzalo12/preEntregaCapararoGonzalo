@@ -21,7 +21,8 @@ cartsRouter.get("/:idUser", async (req, res) => {
   try {
     const cart = await cartManager.getCartByUser(idUser);
     const products = cart.idProducts.map(item => item.idProducts);
-    res.render("cart", { _id: idUser,
+    res.render("cart", {
+      _id: cart._id,
       idUser: cart.idUser,
       products: products
     });
