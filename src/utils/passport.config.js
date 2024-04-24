@@ -4,6 +4,7 @@ import passport from "passport";
 import { createHash, isValidPassword } from "../../public/js/encryption.js";
 import cartManager from "../daos/cartManager.js";
 import GitHubStrategy from "passport-github2";
+import jwt from "passport-jwt";
 
 
 const initializePassport = () => {
@@ -68,6 +69,31 @@ const initializePassport = () => {
         
     });
 
+    //passport-jwt-cookie
+    var cookieExtractor = function(req) {
+        var token = null;
+        if (req && req.signedCookies) {
+            token = req.signedCookies.user;
+        }
+        return token;
+    };
+    const JWTStrategy = jwt.Strategy;
+    const ExtractJWT = jwt.ExtractJwt;
+    passport.use("jwt",new JWTStrategy({
+        jwtFromRequest:ExtractJWT.fromExtractors([cookieExtractor]),
+        secretOrKey:"PrivateKeyForJWT",
+    },async(jwtPayload,done)=>{
+        try {
+            let user = await sessionManager.getUserById(jwtPayload.user._id);
+            if (user) {
+                done(null, user);
+            } else {
+                done(null, false);
+            }
+        } catch (error) {
+            console.log("error getting user: " + error);
+        }
+    }))
 
     //github passport
     passport.use(new GitHubStrategy({
